@@ -24,24 +24,66 @@ except Exception as e:
     print(e)
  
 db = client.userProfile
-profile = db.profile
+collection= db.profile
 
 
 @app.route("/")
 def home():
     return "Hello, World!"
 
-@app.route('/api/data', methods =['POST'])
-def set_data():
+@app.route('/crm/create_user', methods =['POST'])
+def signUp_data():
 
     data = request.get_json()
-        # Process the received data (e.g., save to a database)
-    print(f"Received data: {data}")
-    #if request.method == 'POST':
-    #    content = request.form['content']
-    #    degree = request.form['degree']
-     #   profile.insert_one({'content': content, 'degree': degree})
-    return jsonify({"message": "Data received successfully!", "received_data": data}), 200
+
+    res = collection.find_one({
+        "email":data.get('email')
+        })
+    
+    #Email not found
+    if res == None:
+        obj = collection.insert_one({
+            "firstName": data.get('first'),
+            "lastName": data.get('last'),
+            "company": data.get('company'),
+            "email":data.get('email'),
+            "password": data.get('password'),
+            })
+        
+        id = str(obj.inserted_id)
+
+        return jsonify({
+            "message": "Data received successfully!", 
+            "existAlready": False,
+            "id": id
+            }), 200
+    else:
+        return jsonify({"message": "Email already in database", "existAlready": True}), 200
+
+@app.route('/crm/login_user', methods =['POST'])
+def login_data():
+
+    data = request.get_json()
+
+    res = collection.find_one({
+        "email":data.get('email'),
+        "password":data.get('password')
+        })
+    
+    if res == None:
+        return jsonify({"message": "Email is not in database", "existAlready": False}), 200
+    else:
+
+        id = str(res['_id'])
+        return jsonify({
+            "message": "Data received successfully!", 
+            "existAlready": True,
+            "id": id
+            }), 200
+    
+  
+
+    
 
   
 

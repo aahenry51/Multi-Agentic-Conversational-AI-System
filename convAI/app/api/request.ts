@@ -3,14 +3,7 @@ import type { AxiosResponse,AxiosRequestConfig, RawAxiosRequestHeaders } from 'a
 
 
 export const postSignUpData = async (data:any) => {
-    // let data: signIn = { 
-    //    first name:
-    //    last name:
-    // company
-    //     email: values.email, 
-    //     password: values.password, 
-    //     token: values.token,
-    // };
+
 
     const config: AxiosRequestConfig = {
     headers: {
@@ -21,7 +14,25 @@ export const postSignUpData = async (data:any) => {
 
   try {
   
-    const response: AxiosResponse = await axiosAPI.post(`/api/data`, data);
+    const response: AxiosResponse = await axiosAPI.post(`/crm/create_user`, data);
+
+    return response;
+  } catch (error) {}
+};
+
+export const postLoginData = async (data:any) => {
+
+
+    const config: AxiosRequestConfig = {
+    headers: {
+      'Accept': 'application/json',
+    } as RawAxiosRequestHeaders,
+  };
+
+
+  try {
+  
+    const response: AxiosResponse = await axiosAPI.post(`/crm/login_user`, data);
 
     return response;
   } catch (error) {}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { Route } from "./+types/home";
+import type { Route } from "./+types/signUp";
 import './styles.css'; 
 import { postSignUpData } from '~/api/request';
 
@@ -12,12 +12,11 @@ export function meta({}: Route.MetaArgs) {
 
 
 
-export default function Home() {
+export default function SignUp() {
 
   const handleSubmit = async (e:any) => {
         e.preventDefault();
-        //console.log(inputFirst)
-        postSignUpData({
+        let response = postSignUpData({
           first: inputFirst,
           last: inputLast,
           company: inputCompany,
@@ -25,6 +24,10 @@ export default function Home() {
           password: inputPassword,
         
         })
+        response.then((res:any)=>{
+          console.log(res.data)
+        })
+    
   };
 
   const [inputFirst, setInputFirst] = useState("");
@@ -84,7 +87,7 @@ export default function Home() {
                 placeholder="Enter data"
               />
             </div>
-            <button className="my-button" type="submit">Send Data</button>
+            <button className="my-button" type="submit">Sign Up</button>
         </div>
       </form>
         
